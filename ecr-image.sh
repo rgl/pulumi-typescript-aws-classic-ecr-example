@@ -49,7 +49,7 @@ aws ecr get-login-password \
 
 # manage the image.
 case "$ECR_IMAGE_COMMAND" in
-  create)
+  copy)
     crane copy \
       --allow-nondistributable-artifacts \
       "$source_image" \

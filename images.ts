@@ -44,7 +44,7 @@ export function createImages(region: string, project: string, sourceImages: Reco
         // see https://www.pulumi.com/registry/packages/command/
         new command.local.Command(`${project}/${name}:${sourceImageTag}`, {
             interpreter: ["bash", "-c"],
-            create: "ECR_IMAGE_COMMAND=create exec bash ecr-image.sh",
+            create: "ECR_IMAGE_COMMAND=copy exec bash ecr-image.sh",
             delete: "ECR_IMAGE_COMMAND=delete exec bash ecr-image.sh",
             environment: {
                 ECR_IMAGE_SOURCE_IMAGE: sourceImage,
