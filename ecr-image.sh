@@ -56,11 +56,28 @@ case "$ECR_IMAGE_COMMAND" in
       "$target_image"
     ;;
   delete)
-    # TODO make this idempotent by ignoring the following error:
-    #       MANIFEST_UNKNOWN: Requested image not found
-    #      see https://github.com/google/go-containerregistry/issues/1862
-    crane delete \
-      "$target_image"
+    (
+      set +e
+      echo "Deleting the "$target_image" image..."
+      result="$(crane delete "$target_image" 2>&1)"
+      exit_code="$?"
+      echo "$result"
+      if [ "$exit_code" -ne '0' ]; then
+        # treat the 'image not found' error as success. this error may occur
+        # when someone manually deletes the image. from the script's viewpoint,
+        # it is not considered an error, as the ultimate goal is to have a
+        # deleted image. if it is already deleted, consider it a success.
+        # TODO drop all the error-handling code around 'crane delete' if
+        #      https://github.com/google/go-containerregistry/issues/1862
+        #      is implemented. the goal is to simplify error handling once
+        #      the issue is resolved.
+        if [[ "$result" =~ 'MANIFEST_UNKNOWN: Requested image not found' ]]; then
+          echo "NB The DELETE error was ignored because the image was already deleted."
+          exit 0
+        fi
+        exit "$exit_code"
+      fi
+    )
     ;;
   *)
     die "Unknown $ECR_IMAGE_COMMAND command."
