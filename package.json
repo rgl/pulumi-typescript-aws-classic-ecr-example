@@ -1,0 +1,12 @@
+{
+    "name": "pulumi-typescript-aws-classic-ecr-example",
+    "main": "index.ts",
+    "devDependencies": {
+        "@types/node": "^20.11.0"
+    },
+    "dependencies": {
+        "@pulumi/pulumi": "^3.101.1",
+        "@pulumi/command": "^0.9.2",
+        "@pulumi/aws": "^6.18.0"
+    }
+}

@@ -1,0 +1,3 @@
+name: pulumi-typescript-aws-classic-ecr-example
+runtime: nodejs
+description: This creates private container images repositories hosted in ECR.
